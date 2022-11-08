@@ -19,11 +19,11 @@ class player():
 			if(self.check_pos(size)):
 				match direction[i]:
 					case 'w':
-						self.pos = [self.pos[0],self.pos[1]+1] # go up
+						self.pos = [self.pos[0],self.pos[1]-1] # go up
 					case 'a':
 						self.pos = [self.pos[0]-1,self.pos[1]] # go left
 					case 's':
-						self.pos = [self.pos[0],self.pos[1]-1] # go down
+						self.pos = [self.pos[0],self.pos[1]+1] # go down
 					case 'd':
 						self.pos = [self.pos[0]+1,self.pos[1]] # go right
 			else:
@@ -35,7 +35,17 @@ class stage():
 	def __init__(self):
 		self.size = (5,5) # all stages are rectangles
 		self.exit = (5,5)
-		self.ico = 'X'
+		self.ico = 'O'
+	def draw(self,player_pos,player_ico):
+		for y in range(1,self.size[0]+1):
+			for x in range(1,self.size[1]+1):
+				if(player_pos == [x,y]):
+					print(player_ico,end='')
+				elif(self.exit == (x,y)):
+					print(self.ico,end='')
+				else:
+					print('.',end='')
+			print()
 
 # class init
 player = player()
@@ -44,9 +54,14 @@ stage = stage()
 # game itself
 while(True):
 	clear()
-	print(player.show_pos())
+	stage.draw(player.pos,player.ico)
+	#print(player.show_pos())
 	direction = input('type w,a,s,d to move' + "\n")
 	if (player.move(direction,stage.size) is False):
 		clear()
-		print("OUT OF BOUNDS")
+		print('OUT OF BOUNDS')
+		break
+	if (tuple(player.pos) == stage.exit):
+		clear()
+		print('YOU WIN')
 		break
