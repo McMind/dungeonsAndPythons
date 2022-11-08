@@ -3,14 +3,14 @@ def clear():
 
 class player():
 	def __init__(self):
-		self.pos = [1,1]
+		self.pos = {'x':1,'y':1}
 		self.ico = 'P'
 	def show_pos(self):
-		return str(self.pos[0]) + ',' + str(self.pos[1])
+		return str(self.pos['x']) + ',' + str(self.pos['y'])
 	def check_pos(self,size):
 		x = range(1,size[0] + 1)
 		y = range(1,size[1] + 1)
-		if(self.pos[0] in x and self.pos[1] in y):
+		if(self.pos['x'] in x and self.pos['y'] in y):
 			return True
 		else:
 			return False
@@ -19,13 +19,13 @@ class player():
 			if(self.check_pos(size)):
 				match direction[i]:
 					case 'w':
-						self.pos = [self.pos[0],self.pos[1]-1] # go up
+						self.pos['y'] -= 1 # go up
 					case 'a':
-						self.pos = [self.pos[0]-1,self.pos[1]] # go left
+						self.pos['x'] -= 1 # go left
 					case 's':
-						self.pos = [self.pos[0],self.pos[1]+1] # go down
+						self.pos['y'] += 1 # go down
 					case 'd':
-						self.pos = [self.pos[0]+1,self.pos[1]] # go right
+						self.pos['x'] += 1 # go right
 			else:
 				return False
 		else: 
@@ -39,7 +39,7 @@ class stage():
 	def draw(self,player_pos,player_ico):
 		for y in range(1,self.size[0]+1):
 			for x in range(1,self.size[1]+1):
-				if(player_pos == [x,y]):
+				if(tuple(player_pos.values()) == (x,y)):
 					print(player_ico,end='')
 				elif(self.exit == (x,y)):
 					print(self.ico,end='')
@@ -55,13 +55,13 @@ stage = stage()
 while(True):
 	clear()
 	stage.draw(player.pos,player.ico)
-	#print(player.show_pos())
+	print(player.show_pos())
 	direction = input('type w,a,s,d to move' + "\n")
 	if (player.move(direction,stage.size) is False):
 		clear()
 		print('OUT OF BOUNDS')
 		break
-	if (tuple(player.pos) == stage.exit):
+	if (tuple(player.pos.values()) == stage.exit):
 		clear()
 		print('YOU WIN')
 		break
